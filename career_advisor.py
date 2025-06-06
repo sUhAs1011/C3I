@@ -1,6 +1,8 @@
 import pandas as pd
 from pathlib import Path
 import re
+import glob
+import os
 
 # For Vector DB integration
 import chromadb
@@ -9,10 +11,10 @@ from sentence_transformers import SentenceTransformer # type: ignore
 # Define paths to the data files
 # Assuming the script is run from the workspace root where 'archive (3)' directory exists.
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / "archive (3)" / "Job_Skills"
-COURSERA_CSV = DATA_DIR / "coursera_course_dataset_v3.csv"
+JOB_DATASET_DIR = BASE_DIR / "job_dataset"  # New base directory for job and course data
+COURSERA_CSV = JOB_DATASET_DIR / "coursera_course_dataset_v3.csv"
 # LINKEDIN_JOBS_CSV = DATA_DIR / "linkedin_job_postings.csv" # Not directly used in this simplified version
-JOB_SKILLS_CSV = DATA_DIR / "job_skills.csv" # Used to populate job skills in Chroma
+# JOB_SKILLS_CSV = DATA_DIR / "job_skills.csv" # No longer directly used
 # JOB_SUMMARY_CSV = DATA_DIR / "job_summary.csv" # Not directly used
 RESUME_DIR = BASE_DIR / "resume" # Directory where user might upload resumes
 
@@ -160,7 +162,7 @@ SKILL_NORMALIZATION_MAP = {
     "powerpoint": "powerpoint", "ms powerpoint": "powerpoint",
     "communication skills": "communication", "verbal communication": "communication", "written communication": "communication",
     "team work": "teamwork", "collaboration skills": "teamwork", "team player": "teamwork",
-    "problem-solving": "problem solving", "analytical skills": "problem solving", "critical thinking": "problem solving",
+    "problem-solving": "problem solving", "analytical skills": "problem solving", "critical thinking": "critical thinking",
     "project management": "project management", "project planning": "project management",
     "leadership skills": "leadership", "team leadership": "leadership",
     "time management": "time management",
@@ -201,7 +203,7 @@ def normalize_skill_list(skills, normalization_map):
 
 def initialize_vector_database(df_coursera_for_skills):
     """
-    Initializes ChromaDB and populates it with skill embeddings from job_skills.csv and Coursera data.
+    Initializes ChromaDB and populates it with skill embeddings from job postings and Coursera data.
     This function should be run once to set up the ChromaDB collections.
     df_coursera_for_skills: DataFrame containing processed Coursera data, including 'Canonical_Course_Skills'.
     """
@@ -210,10 +212,10 @@ def initialize_vector_database(df_coursera_for_skills):
     model = get_embedding_model()
     chroma_client = get_chroma_client()
     
-    chunk_size = 10 # For reading job_skills.csv
+    chunk_size = 10 # For reading job postings
 
     # -- ChromaDB Initialization for Job Skills --
-    print(f"Populating ChromaDB with job skill embeddings from {JOB_SKILLS_CSV}...")
+    print(f"Populating ChromaDB with job skill embeddings from CSV files in {JOB_DATASET_DIR}...")
     job_skill_collection = chroma_client.get_or_create_collection(
         name=CHROMA_JOB_SKILLS_COLLECTION,
         metadata={"hnsw:space": "cosine"}
@@ -223,17 +225,24 @@ def initialize_vector_database(df_coursera_for_skills):
     processed_job_skill_ids_in_chroma = set() # To avoid trying to add duplicates in this session if script is re-run partially
                                           # For true idempotency, would need to check existing IDs in Chroma or clear collection.
 
-    if JOB_SKILLS_CSV.exists():
+    # Iterate through CSV files in the job_dataset directory
+    for job_csv in glob.glob(os.path.join(str(JOB_DATASET_DIR), "*.csv")):
+        job_csv_path = Path(job_csv)
+        if job_csv_path == COURSERA_CSV:
+            print(f"Skipping Coursera data file: {job_csv_path}")
+            continue  # Skip the Coursera data file
+
+        print(f"Processing job postings from: {job_csv_path}")
         try:
-            for chunk_idx, chunk in enumerate(pd.read_csv(JOB_SKILLS_CSV, chunksize=chunk_size, on_bad_lines='skip')):
-                print(f"Processing chunk {chunk_idx + 1} of {JOB_SKILLS_CSV} for job skills...")
+            for chunk_idx, chunk in enumerate(pd.read_csv(job_csv_path, chunksize=chunk_size, on_bad_lines='skip')):
+                print(f"Processing chunk {chunk_idx + 1} of {job_csv_path} for job skills...")
                 embeddings_batch = []
                 metadata_batch = []
                 ids_batch = []
                 
                 for _, row in chunk.iterrows():
-                    job_link = row.get('job_link')
-                    raw_skills_str = row.get('job_skills')
+                    job_link = row.get('title href')  # Changed to 'title href'
+                    raw_skills_str = row.get('job-desc') # Changed to 'job-desc'
 
                     if pd.isna(job_link) or pd.isna(raw_skills_str) or not isinstance(raw_skills_str, str):
                         continue
@@ -247,21 +256,19 @@ def initialize_vector_database(df_coursera_for_skills):
                         # This check is for current session; a true check would query Chroma if skill_id exists
                         if skill_id not in processed_job_skill_ids_in_chroma:
                             embeddings_batch.append(model.encode(skill).tolist()) # type: ignore
-                            metadata_batch.append({"job_link": str(job_link), "skill_name": skill, "source": "job_posting"})
+                            metadata_batch.append({"job_link": str(job_link), "skill_name": skill, "source": "job_posting", "file": job_csv_path.name})
                             ids_batch.append(skill_id)
                             processed_job_skill_ids_in_chroma.add(skill_id)
 
                 if ids_batch:
                     try:
                         job_skill_collection.add(embeddings=embeddings_batch, metadatas=metadata_batch, ids=ids_batch)
-                        print(f"Added {len(ids_batch)} job skill embeddings to ChromaDB from chunk {chunk_idx + 1}.")
+                        print(f"Added {len(ids_batch)} job skill embeddings to ChromaDB from chunk {chunk_idx + 1} of {job_csv_path}.")
                     except Exception as e:
-                        print(f"Error adding job skill embeddings to ChromaDB for chunk {chunk_idx+1}: {e}")
-            print(f"Finished populating ChromaDB for job skills from {JOB_SKILLS_CSV}.")
+                        print(f"Error adding job skill embeddings to ChromaDB for chunk {chunk_idx+1} of {job_csv_path}: {e}")
+            print(f"Finished populating ChromaDB for job skills from {job_csv_path}.")
         except Exception as e:
-            print(f"Error processing {JOB_SKILLS_CSV}: {e}")
-    else:
-        print(f"{JOB_SKILLS_CSV} not found. Cannot populate job skills.")
+            print(f"Error processing {job_csv_path}: {e}")
 
     # -- ChromaDB Population for Coursera Skills --
     print("Populating ChromaDB with Coursera skill embeddings...")
@@ -551,4 +558,4 @@ def main():
                 print(f"  Link: {rec['course_url']}\n")
 
 if __name__ == "__main__":
-    main() 
+    main()
