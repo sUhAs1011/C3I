@@ -27,6 +27,8 @@ except Exception as e:
 
 import chromadb
 import numpy as np  # Import numpy
+import webbrowser  # Import webbrowser
+from tkinter import ttk  # Import ttk
 
 # Download required NLTK data (if not already downloaded)
 try:
@@ -300,10 +302,17 @@ def analyze_skill_gap(resume_skills, job_skills):
     print(f"Missing Skills (canonical string): {missing_skills}")
     return missing_skills
 
-def recommend_courses(missing_skills):
+def recommend_courses(missing_skills, job_skills):
     """Recommends Coursera courses based on a list of skills."""
     global course_skill_collection, df_coursera
     print(f"Recommending courses for skills: {missing_skills}...")
+
+    skill_weights = {}
+    for skill in job_skills:
+        skill_weights[skill] = 1.0  # Default weight
+    # Adjust weights based on importance
+    if "python" in skill_weights:
+        skill_weights["python"] = 1.2
 
     if not missing_skills:
         print("No missing skills provided. No recommendations needed.")
@@ -326,7 +335,7 @@ def recommend_courses(missing_skills):
         try:
             query_results = course_skill_collection.query(
                 query_embeddings=[skill_embedding],
-                n_results=2,
+                n_results=5, # Increased n_results to get more options
                 include=["metadatas"]
             )
         except Exception as e:
@@ -338,6 +347,11 @@ def recommend_courses(missing_skills):
                 course_url = meta.get("course_url")
                 matched_skill_in_course = meta.get("skill_name")
                 course_title = meta.get("course_title")
+
+                # Add a check to ensure the matched skill is relevant
+                if skill_needed_str.lower() not in matched_skill_in_course.lower() and matched_skill_in_course.lower() not in skill_needed_str.lower():
+                    print(f"Skipping course '{course_title}' because matched skill '{matched_skill_in_course}' is not relevant to '{skill_needed_str}'")
+                    continue
 
                 if course_url:
                     course_details_row = df_coursera[df_coursera['course_url'] == course_url]
@@ -375,8 +389,18 @@ def analyze_skills():
         messagebox.showerror("Error", "Please enter a job title.")
         return
 
+    # Create a progress bar
+    progress_bar = ttk.Progressbar(root, orient="horizontal", length=200, mode="indeterminate")
+    progress_bar.grid(row=5, column=0, columnspan=3, pady=10)
+    progress_bar.start()
+
     # --- Extract Skills from Resume ---
     resume_skills = extract_skills_from_resume(resume_file)
+
+    # Stop the progress bar
+    progress_bar.stop()
+    progress_bar.destroy()
+
     if not resume_skills:
         messagebox.showerror("Error", "Could not extract skills from resume.")
         return
@@ -391,12 +415,12 @@ def analyze_skills():
     missing_skills = analyze_skill_gap(resume_skills, job_skills)
 
     # --- Recommend Courses ---
-    course_recommendations = recommend_courses(missing_skills)
+    course_recommendations = recommend_courses(missing_skills, job_skills)
 
     # --- Display Results ---
-    display_results(course_recommendations)
+    display_results(course_recommendations, resume_skills, job_skills)
 
-def display_results(course_recommendations):
+def display_results(course_recommendations, resume_skills=None, job_skills=None):
     """Displays the course recommendations in the GUI."""
     result_text.delete("1.0", tk.END)  # Clear previous results
 
@@ -406,9 +430,18 @@ def display_results(course_recommendations):
             result_text.insert(tk.END, f"For skill: '{rec['queried_skill']}'\n")
             result_text.insert(tk.END, f"  Course: {rec['course_title']} by {rec['organization']}\n")
             result_text.insert(tk.END, f"  Rating: {rec['rating']}, Difficulty: {rec['difficulty']}\n")
-            result_text.insert(tk.END, f"  Link: {rec['course_url']}\n\n")
+
+            # Create a clickable link
+            url = rec['course_url']
+            link = tk.Label(result_text, text="Link", fg="blue", cursor="hand2")
+            link.bind("<Button-1>", lambda event, url=url: webbrowser.open_new(url))
+            result_text.window_create(tk.END, window=link)
+            result_text.insert(tk.END, "\n\n")
     else:
-        result_text.insert(tk.END, "No courses found for the missing skills.")
+        if resume_skills is not None and job_skills is not None:
+            result_text.insert(tk.END, "Your resume is well-aligned with the required job skills. No specific courses are recommended at this time.")
+        else:
+            result_text.insert(tk.END, "No courses found for the missing skills.")
 
 def initialize_data():
     """Loads Coursera data and initializes ChromaDB."""
@@ -433,6 +466,17 @@ root.title("Career Advisor")
 
 # Configure background color for the root window
 root.configure(bg="#E0F2F7")  # Light sky blue
+
+# Get screen dimension
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+
+# Find the center point
+center_x = int(screen_width/2 - 600/2)  # Assuming a window width of 600
+center_y = int(screen_height/2 - 400/2) # Assuming a window height of 400
+
+# Set the position of the window to the center of the screen
+root.geometry(f'600x400+{center_x}+{center_y}')
 
 # --- Variables ---
 resume_path = tk.StringVar()
@@ -461,6 +505,10 @@ job_title_entry.grid(row=1, column=1, padx=10, pady=5)
 # Analyze Button
 analyze_button = tk.Button(root, text="Analyze Skills", command=analyze_skills, bg=button_bg, fg=button_fg)
 analyze_button.grid(row=2, column=1, pady=10)
+analyze_button_tooltip = ttk.Label(root,
+                                    text="Click here to analyze your skills and get course recommendations.",
+                                    background=label_bg)
+analyze_button_tooltip.grid(row=2, column = 0)
 
 # Results Display
 result_label = tk.Label(root, text="Recommended Courses:", bg=label_bg)
@@ -469,7 +517,13 @@ result_text = tk.Text(root, height=15, width=70, bg=entry_bg)
 result_text.grid(row=4, column=0, columnspan=3, padx=10, pady=5)
 
 # --- Initialize Data ---
-if not initialize_data():
-    root.destroy()  # Close the GUI if data initialization fails
-else:
-    root.mainloop()
+import threading
+
+def load_data_async():
+    if not load_coursera_data():
+        root.destroy()
+    else:
+        initialize_vector_database(df_coursera)  # Initialize ChromaDB in the background
+
+threading.Thread(target=load_data_async).start()
+root.mainloop()
