@@ -56,8 +56,8 @@
 ### Streamlit Interface
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0fee8bb8-8fe0-42df-a2bf-497723d08599" />
 
-### Course Recommendatio
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ef0748d4-d270-4380-9396-cfd040b7b2a8" />
+### Skill Extraction From Resume Using Tessseract OCR
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4407a85d-7b93-45c6-8e0a-9a7d45b5c85d" />
 
 ### Invalid Document Upload
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f8a1f6d8-f265-422a-9575-f169464b7717" />
