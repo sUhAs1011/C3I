@@ -59,8 +59,8 @@
 ### Skill Extraction From Resume Using Tessseract OCR
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4407a85d-7b93-45c6-8e0a-9a7d45b5c85d" />
 
-### Invalid Document Upload
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f8a1f6d8-f265-422a-9575-f169464b7717" />
+### Course Recommendation in case of Skill Gap
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/32581621-e8e8-473d-a3fc-22fdba8ed9f1" />
 
 ### Invalid Job Title
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c9b3b9cd-f551-46eb-a657-273a918eebba" />
