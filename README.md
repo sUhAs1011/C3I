@@ -65,6 +65,10 @@
 ### Invalid Document Upload
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/328b7f6b-232e-426b-8b08-f4765cd8499b" />
 
+### Irrelevant Job Post
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/193cb973-1b03-44e4-a7ae-905258d42cc2" />
+
+
 
 
 
