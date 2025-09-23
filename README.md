@@ -62,8 +62,9 @@
 ### Course Recommendation in case of Skill Gap
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/32581621-e8e8-473d-a3fc-22fdba8ed9f1" />
 
-### Invalid Job Title
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c9b3b9cd-f551-46eb-a657-273a918eebba" />
+### Invalid Document Upload
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/328b7f6b-232e-426b-8b08-f4765cd8499b" />
+
 
 
 
