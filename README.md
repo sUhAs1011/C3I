@@ -54,9 +54,9 @@
 
 
 ### Streamlit Interface
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d3b9ffd3-2226-4016-8955-4e796a264877" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0fee8bb8-8fe0-42df-a2bf-497723d08599" />
 
-### Course Recommendation
+### Course Recommendatio
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ef0748d4-d270-4380-9396-cfd040b7b2a8" />
 
 ### Invalid Document Upload
