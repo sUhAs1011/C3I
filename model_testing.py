@@ -466,8 +466,62 @@ def extract_skills_from_resume(text):
         # Keep the skill if it passes all filters
         filtered_skills.append(skill)
     
-    # Remove duplicates and sort
-    return sorted(list(set(filtered_skills)))
+    # Final cleanup: remove timeline phrases, months, and non-skill multi-word noise
+    banned_substrings = [
+        'graduat',  # graduating, graduate, graduation
+        'intern',   # intern, internship
+        'fresher', 'semester', 'term', 'session'
+    ]
+    months_full = [
+        'january', 'february', 'march', 'april', 'may', 'june',
+        'july', 'august', 'september', 'october', 'november', 'december'
+    ]
+    months_abbr = ['jan', 'feb', 'mar', 'apr', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+    months_set = set(months_full + months_abbr)
+
+    # Allow common multi-word skill phrases; others beyond 3 words will be dropped
+    allowed_multiword_phrases = set([
+        'machine learning', 'deep learning', 'computer vision', 'data structures',
+        'big data', 'cloud computing', 'software engineering', 'computer networks',
+        'web technologies', 'data analytics', 'project management', 'business analysis',
+        'product management', 'supply chain'
+    ])
+
+    cleaned_skills = []
+    seen_normalized = set()
+
+    for skill in filtered_skills:
+        original = skill.strip()
+        if not original:
+            continue
+        lower = original.lower()
+
+        # Drop if contains any banned substring (timeline, graduating, intern)
+        if any(bad in lower for bad in banned_substrings):
+            continue
+
+        # Tokenize to detect months/years
+        tokens = re.split(r"[^a-zA-Z0-9+#./]+", lower)
+        if any(tok in months_set for tok in tokens):
+            # If a month token appears, treat as timeline phrase → drop
+            continue
+        if any(re.fullmatch(r'(19|20)\d{2}', tok or '') for tok in tokens):
+            # Contains a year → likely timeline
+            continue
+
+        # Limit overly long multi-word phrases unless explicitly allowed
+        word_count = len([t for t in tokens if t])
+        if word_count > 3 and lower not in allowed_multiword_phrases:
+            continue
+
+        # Normalize for deduping (case-insensitive, collapse spaces/punct to single space)
+        norm = re.sub(r"\s+", " ", re.sub(r"[^a-zA-Z0-9+#./ ]+", " ", lower)).strip()
+        if norm in seen_normalized:
+            continue
+        seen_normalized.add(norm)
+        cleaned_skills.append(original)
+
+    return cleaned_skills
 
 # --- DSSM Model Definition ---
 class DSSMModel(nn.Module):
@@ -1279,4 +1333,7 @@ elif analyze_button:
 
 st.markdown("---")
 st.markdown("Powered by DSSM and Streamlit")
+
+
+
 
