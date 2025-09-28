@@ -1,4 +1,4 @@
-# Centre of Cognitive Computing and Computational Intelligence(C3I)
+# AI-Powered-Skill-Gap-Analysis-Reskilling-for-Employment-Trends
 
 ### Key Features 
 
