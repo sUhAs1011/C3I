@@ -283,21 +283,22 @@ def extract_skills_from_resume(text):
             # Programming languages
             Python|Java|C\+\+|C\#|JavaScript|TypeScript|PHP|Ruby|Go|Swift|Kotlin|Scala|R|
             # Frameworks and libraries
-            React|Angular|Vue\.js|Node\.js|Django|Flask|FastAPI|Spring|Express|Laravel|
+            React|Angular|Vue\.js|Node\.js|Django|Flask|FastAPI|Spring|Express|Laravel|Streamlit|OpenCV|
             # Databases
             SQL|NoSQL|MongoDB|PostgreSQL|MySQL|Oracle|Redis|Cassandra|Elasticsearch|
             # Cloud platforms
             AWS|Azure|GCP|Docker|Kubernetes|Terraform|Ansible|Jenkins|
             # ML/AI
             TensorFlow|PyTorch|Keras|Scikit-learn|Pandas|NumPy|Matplotlib|Seaborn|
-            Machine\sLearning|Deep\sLearning|AI|NLP|Computer\sVision|
+            Machine\sLearning|Deep\sLearning|AI|NLP|Computer\sVision|Sentence\sTransformers|OCR|Tesseract|
             # Tools and methodologies
-            Git|CI/CD|DevOps|Agile|Scrum|RESTful\sAPIs|GraphQL|Microservices|
+            Git|CI/CD|DevOps|Agile|Scrum|RESTful\sAPIs|GraphQL|Microservices|Socket\sProgramming|
             # Data and analytics
             Data\sAnalysis|Data\sVisualization|Big\sData|Hadoop|Spark|Tableau|Power\sBI|
             # Other technical skills
             Linux|Windows|MacOS|Network\sEngineering|Cyber\sSecurity|Cloud\sComputing|
-            UI/UX|Frontend|Backend|Full\sStack|Mobile\sDevelopment|API\sDevelopment
+            UI/UX|Frontend|Backend|Full\sStack|Mobile\sDevelopment|API\sDevelopment|
+            IPFS|Blockchain|UDP|TCP|SSL|TLS|Arduino|GSM|ChromaDB|Chroma|DSSM|Ollama
         )\b
     """
     
@@ -311,7 +312,7 @@ def extract_skills_from_resume(text):
             Customer\sService|Business\sDevelopment|Strategy|Consulting|Project\sManagement|
             Product\sManagement|Business\sAnalysis|Market\sResearch|Competitive\sAnalysis|
             # Domain expertise
-            E-commerce|Retail|Healthcare|Finance|Banking|Insurance|Education|Government|
+            E-commerce|Retail|Healthcare|Finance|Banking|Insurance|Education|Government|Compliance|Regulation|
             Manufacturing|Logistics|Transportation|Real\sEstate|Media|Entertainment|
             # Soft skills
             Leadership|Communication|Teamwork|Problem\sSolving|Analytical|Critical\sThinking|
@@ -385,7 +386,9 @@ def extract_skills_from_resume(text):
             'business', 'project', 'product', 'customer', 'service',
             'data', 'software', 'network', 'security', 'cloud', 'database', 
             'api', 'mobile', 'frontend', 'backend', 'machine', 'learning',
-            'deep', 'artificial', 'intelligence', 'nlp', 'computer', 'vision'
+            'deep', 'artificial', 'intelligence', 'nlp', 'computer', 'vision',
+            'blockchain', 'transformer', 'ipfs', 'arduino', 'udp', 'ssl', 'tls',
+            'ocr', 'chroma', 'dssm', 'ollama', 'streamlit', 'mongodb', 'socket'
         ]
         if any(keyword in skill_lower for keyword in relevant_keywords):
             relevant_multi_words.append(skill)
@@ -478,7 +481,9 @@ def extract_skills_from_resume(text):
         'machine learning', 'deep learning', 'computer vision', 'data structures',
         'big data', 'cloud computing', 'software engineering', 'computer networks',
         'web technologies', 'data analytics', 'project management', 'business analysis',
-        'product management', 'supply chain'
+        'product management', 'supply chain',
+        'sentence transformers', 'deep structured semantic model', 'socket programming',
+        'chroma db'
     ])
 
     cleaned_skills = []
