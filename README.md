@@ -44,8 +44,7 @@ During my internship at the Centre of Cognitive Computing and Computational Inte
  ### Model Training Results 
 <img width="3552" height="1768" alt="training_curves" src="https://github.com/user-attachments/assets/be045287-41da-4112-9e65-afe22c77c6c9" />
 
-<img width="2370" height="570" alt="metrics_table" src="https://github.com/user-attachments/assets/bc2bb0d4-f157-4423-94e6-c9f00f5f8dc7" />
-
+<img width="1869" height="531" alt="image" src="https://github.com/user-attachments/assets/0c66d0af-7d88-4256-b7d0-fdb47fe0691a" />
 
 <img width="751" height="249" alt="image" src="https://github.com/user-attachments/assets/25ef7862-cebd-44f3-8821-925d897031a6" />
 
