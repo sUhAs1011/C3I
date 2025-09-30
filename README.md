@@ -42,7 +42,6 @@ During my internship at the Centre of Cognitive Computing and Computational Inte
 ![WhatsApp Image 2025-08-25 at 17 08 29_c9deb4c6](https://github.com/user-attachments/assets/17cf07cb-a8ee-498a-a080-66e6e984af04)
 
  ### Model Training Results 
-<img width="3552" height="1768" alt="training_curves" src="https://github.com/user-attachments/assets/be045287-41da-4112-9e65-afe22c77c6c9" />
 
 <img width="1000" height="600" alt="Figure_2" src="https://github.com/user-attachments/assets/66b9e7ca-1061-4538-a946-2f74e3366e01" />
 
