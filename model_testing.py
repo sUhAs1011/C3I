@@ -207,38 +207,32 @@ def is_resume_content(text):
     has_dates = bool(re.search(r'\b(19|20)\d{2}\b', text))  # Years like 2020, 2021
     has_company_names = bool(re.search(r'\b(inc|corp|llc|ltd|company|corporation|technologies|solutions|systems|group|team)\b', text_lower))
     
-    # Calculate a score based on resume indicators (max 10 points)
-    score = 0
-    if has_resume_indicators: score += 2
-    if has_contact_info: score += 1
-    if has_work_section: score += 2
-    if has_education: score += 1
-    if has_dates: score += 1
-    if has_company_names: score += 1
-    
+    # Calculate a normalized score (0-10) using weighted features
     # Additional scoring criteria for more granular assessment
-    # Check for skills section
     has_skills_section = any(pattern in text_lower for pattern in ['skills', 'technical skills', 'professional skills', 'competencies', 'expertise'])
-    if has_skills_section: score += 1
-    
-    # Check for certifications
     has_certifications = any(pattern in text_lower for pattern in ['certification', 'certified', 'certificate', 'license', 'accreditation'])
-    if has_certifications: score += 1
-    
-    # Check for project experience
     has_projects = any(pattern in text_lower for pattern in ['project', 'portfolio', 'achievement', 'accomplishment', 'deliverable'])
-    if has_projects: score += 1
-    
-    # Check for achievements and accomplishments
     has_achievements = any(pattern in text_lower for pattern in ['achievement', 'accomplishment', 'result', 'outcome', 'impact', 'contribution'])
-    if has_achievements: score += 1
-    
-    # Check for responsibilities and duties
     has_responsibilities = any(pattern in text_lower for pattern in ['responsibility', 'duty', 'task', 'function', 'role', 'position'])
-    if has_responsibilities: score += 1
-    
-    # Ensure score doesn't exceed maximum
-    score = min(score, 10)
+
+    # Declarative weighted feature list
+    weighted_features = [
+        (has_resume_indicators, 2),
+        (has_contact_info, 1),
+        (has_work_section, 2),
+        (has_education, 1),
+        (has_dates, 1),
+        (has_company_names, 1),
+        (has_skills_section, 1),
+        (has_certifications, 1),
+        (has_projects, 1),
+        (has_achievements, 1),
+        (has_responsibilities, 1),
+    ]
+
+    raw_score = sum(weight for present, weight in weighted_features if present)
+    max_raw_score = sum(weight for _, weight in weighted_features)
+    score = int(round(10 * raw_score / max_raw_score)) if max_raw_score > 0 else 0
     
     # Check for irrelevant content that suggests it's not a resume
     # Only flag very specific non-resume content patterns
@@ -748,9 +742,9 @@ def find_course_recommendations_from_json(skill_gap, json_mapping, client, top_n
                     if course_id in course_id_to_meta:
                         meta = course_id_to_meta[course_id]
                         organization = meta.get('organization', 'Coursera')
-                        # Try to get organization from other fields if not found
-                        if organization == 'Unknown Organization':
-                            organization = meta.get('Organization', meta.get('organization_name', 'Coursera'))
+                        # Normalize unknowns to Coursera
+                        if organization in ('Unknown Organization', None, ''):
+                            organization = meta.get('Organization', meta.get('organization_name', 'Coursera')) or 'Coursera'
                     else:
                         # Default to Coursera for course recommendations
                         organization = 'Coursera'
@@ -801,9 +795,13 @@ def find_course_recommendations_from_dssm(skill_gap, dssm_model, client, embeddi
             
             skill_recs = []
             for idx in top_indices:
+                meta = all_courses['metadatas'][idx]
+                org = meta.get('organization')
+                if org in ('Unknown Organization', 'Unknown', None, ''):
+                    org = meta.get('Organization', meta.get('organization_name', 'Coursera')) or 'Coursera'
                 rec = {
-                    "title": all_courses['metadatas'][idx].get('course_title', 'Unknown Course'),
-                    "organization": all_courses['metadatas'][idx].get('organization', 'Unknown'),
+                    "title": meta.get('course_title', 'Unknown Course'),
+                    "organization": org,
                     "similarity": similarities[idx].item(),
                     "source": "DSSM Model"
                 }
@@ -1216,8 +1214,7 @@ if analyze_button and resume_file and job_title_input:
                     st.json(target_job_meta)
                 # --- END DEBUGGING ---
                 
-                with st.expander("View Job Description"):
-                    st.write(job_desc)
+                # Omit job description display per request
 
                 required_skills = get_skills_from_job_metadata(target_job_meta)
                 
@@ -1272,6 +1269,8 @@ if analyze_button and resume_file and job_title_input:
                                     for i, course_info in enumerate(job_recommendations[:5], 1):  # Show top 5
                                         course_title = course_info.get('title', 'Unknown Course')
                                         organization = course_info.get('organization', 'Coursera')
+                                        if organization in ('Unknown Organization', 'Unknown', None, ''):
+                                            organization = 'Coursera'
                                         similarity = course_info.get('similarity', 0.0)
                                         st.markdown(f"{i}. *{course_title}* by {organization}")
                                         st.markdown(f"   📊 Relevance: {similarity:.3f} 🔄 JSON")
@@ -1317,6 +1316,8 @@ if analyze_button and resume_file and job_title_input:
                                                 for i, course_info in enumerate(top_courses[:3], 1):
                                                     course_title = course_info.get('title', 'Unknown Course')
                                                     organization = course_info.get('organization', 'Coursera')
+                                                    if organization in ('Unknown Organization', 'Unknown', None, ''):
+                                                        organization = 'Coursera'
                                                     similarity = course_info.get('similarity', 0.0)
                                                     st.markdown(f"{i}. *{course_title}* by {organization} (Similarity: {similarity:.3f})")
                                             break
@@ -1333,7 +1334,4 @@ elif analyze_button:
 
 st.markdown("---")
 st.markdown("Powered by DSSM and Streamlit")
-
-
-
 
