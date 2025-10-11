@@ -2,6 +2,8 @@
 
 During my internship at the Centre of Cognitive Computing and Computational Intelligence (C3I) in the Summer of 2025, I designed and deployed an end-to-end career advisory system using dual-tower Deep Structured Semantic Models and ChromaDB achieving highly accurate job–course matching.
 
+![WhatsApp Image 2025-10-11 at 10 31 46_b1f32f95](https://github.com/user-attachments/assets/b0338509-1d26-4cec-97f7-eb42df39740c)
+
 ### Key Features 
 
 - Utilized all-MiniLM-L6-v2 to generate and push refined job and course embeddings into ChromaDB for efficient semantic search.
