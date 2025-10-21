@@ -61,7 +61,7 @@ During my internship at the Centre of Cognitive Computing and Computational Inte
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a8b17aac-2408-45f4-924d-72142b78d9ba" />
 
 ### Skill Extraction From Resume Using Tesseract OCR
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4407a85d-7b93-45c6-8e0a-9a7d45b5c85d" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b0bc39df-bfda-40b6-be08-b494695c73cf" />
 
 ### Course Recommendation in case of Skill Gap
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4edd745c-ae41-4941-be49-0d2405dc180e" />
