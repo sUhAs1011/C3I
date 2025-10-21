@@ -70,7 +70,7 @@ During my internship at the Centre of Cognitive Computing and Computational Inte
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/18b42bb9-178e-433d-876b-c2709a4e3ac8" />
 
 ### Irrelevant Job Post
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/193cb973-1b03-44e4-a7ae-905258d42cc2" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d7ccb700-1720-4773-8b7b-67d042d235f8" />
 
 
 
