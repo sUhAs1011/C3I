@@ -58,7 +58,7 @@ During my internship at the Centre of Cognitive Computing and Computational Inte
 
 
 ### Streamlit Interface
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a8b17aac-2408-45f4-924d-72142b78d9ba" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0cfb4da4-e838-4a93-9880-327f3215675d" />
 
 ### Skill Extraction From Resume Using Tesseract OCR
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b0bc39df-bfda-40b6-be08-b494695c73cf" />
