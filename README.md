@@ -67,7 +67,7 @@ During my internship at the Centre of Cognitive Computing and Computational Inte
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f85e9fa6-9a90-4482-b342-89c944582010" />
 
 ### Invalid Document Upload
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/18b42bb9-178e-433d-876b-c2709a4e3ac8" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a13ec228-fb4a-4f80-a867-85d3cb1ad06c" />
 
 ### Irrelevant Job Post
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d7ccb700-1720-4773-8b7b-67d042d235f8" />
