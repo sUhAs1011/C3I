@@ -64,7 +64,7 @@ During my internship at the Centre of Cognitive Computing and Computational Inte
 <img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/07bce9d4-d0ae-43aa-be34-c0d21163901c" />
 
 ### Course Recommendation in case of Skill Gap
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f85e9fa6-9a90-4482-b342-89c944582010" />
+<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/57a7561e-f621-4240-9c66-c5ad77593b5e" />
 
 ### Invalid Document Upload
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a13ec228-fb4a-4f80-a867-85d3cb1ad06c" />
