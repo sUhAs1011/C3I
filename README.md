@@ -1,88 +1,335 @@
-# AI Powered Skill Gap Analysis Reskilling For Employment Trends
+# 🎯 AI-Powered Skill Gap Analysis & Reskilling for Employment Trends
 
-During my internship at the Centre of Cognitive Computing and Computational Intelligence (C3I) in the Summer of 2025, I designed and deployed an end-to-end career advisory system using dual-tower Deep Structured Semantic Models and ChromaDB achieving highly accurate job–course matching.
+An AI-driven career recommendation platform that analyzes a candidate's resume, identifies skill gaps for a target job role, and recommends personalized learning pathways using semantic search and deep learning.
 
-![poster](https://github.com/user-attachments/assets/6f8fb9ab-c453-4db7-9544-944519869cd7)
+Developed during my **Summer 2025 Internship** at the **Centre of Cognitive Computing and Computational Intelligence (C3I)**, this project combines **Natural Language Processing (NLP)**, **Deep Structured Semantic Models (DSSM)**, **Vector Databases**, and **Resume Parsing** to build an end-to-end intelligent career advisory system.
 
-### Key Features 
+---
 
-- Utilized all-MiniLM-L6-v2 to generate and push refined job and course embeddings into ChromaDB for efficient semantic search.
+# 📌 Project Overview
 
-- Employed a Deep Structured Semantic Model (DSSM) for training to learn enhanced semantic relationships.
+Traditional job recommendation systems rely on keyword matching, often missing semantic relationships between skills, courses, and job descriptions.
 
-- Developed a Streamlit web application as a user-friendly frontend interface, facilitating interactive skill gap analysis and course recommendations.
+This project addresses that limitation by combining:
 
-- Provided intelligent course suggestions directly addressing identified skill gaps relevant to a specific job position, leveraging both pre-computed mappings and the trained DSSM.
+- Semantic Embeddings
+- Deep Structured Semantic Models (DSSM)
+- ChromaDB Vector Search
+- OCR-based Resume Parsing
+- NLP Skill Extraction
 
-### Objective
+to provide personalized career guidance and intelligent course recommendations.
 
-- Develop a model that extracts skills from user resumes and identifies gaps between current capabilities and target job requirements.
+---
 
-- Create a deep learning-based recommendation system using DSSM that suggests relevant courses based on identified skill gaps and job requirements.
+# 🚀 Features
 
-- Build a robust system that can extract skills from various resume formats (PDF, DOCX, images) using OCR and NLP techniques, filtering out irrelevant content.
+- 📄 Resume parsing from PDF, DOCX, and images
+- 🔍 OCR-powered text extraction using Tesseract
+- 🧠 NLP-based skill extraction and normalization
+- 🎯 AI-driven skill gap identification
+- 📚 Personalized course recommendations
+- 🔎 Semantic search using ChromaDB
+- 🤖 DSSM-based job-course matching
+- 🌐 Interactive Streamlit web application
+- 🛣️ Learning roadmap generation
 
-- Develop an interactive Streamlit application that provides instant career guidance, skill analysis, and course recommendations with a user-friendly interface.
+---
 
+# 🏗️ System Architecture
 
+The system follows a multi-stage AI pipeline that transforms raw resumes into personalized career recommendations.
 
-### Implementation
+```text
+Resume
+   │
+   ▼
+OCR & Text Extraction
+(Tesseract)
+   │
+   ▼
+NLP Skill Extraction
+   │
+   ▼
+Skill Normalization
+   │
+   ▼
+Job Embeddings
+Course Embeddings
+(all-MiniLM-L6-v2)
+   │
+   ▼
+ChromaDB
+(Vector Database)
+   │
+   ▼
+Deep Structured
+Semantic Model (DSSM)
+   │
+   ▼
+Skill Gap Analysis
+   │
+   ▼
+Course Recommendation
+   │
+   ▼
+Learning Roadmap
+```
 
-- `eda_analysis`: This script analyzes raw job and course data, identifying missing values and key characteristics. It performs cross-dataset skill analysis to find common skills and highlight gaps between job requirements and course offerings.
+---
 
-- `data_processing`: This script cleans and standardizes raw data, handling missing values and normalizing skill names to a canonical form. It also creates a combined text field for each job and course, which is essential for later embedding.
-  
-- `populate_chromadb`: Generates This script converts the preprocessed text into vector embeddings using `all-MiniLM-L6-v2` and populates a ChromaDB vector database with these embeddings. It also performs an initial job-to-course similarity mapping, saving the results to a JSON file.
+# 🧠 AI Pipeline
 
-- `model_training`: This script trains a `Deep Structured Semantic Model (DSSM)` to refine job-course similarity. It uses embeddings from ChromaDB and generates a dataset of positive and negative pairs for training. The training process incorporates an `Exponential Moving Average (EMA)` and early stopping to save the best-performing model.
+## 📄 Resume Processing
 
-- `model_testing`: This script is a Streamlit web application that acts as the user interface. It analyzes a user's resume, identifies skill gaps for a desired job, and recommends relevant courses by leveraging either the pre-computed mappings or the trained DSSM model for deeper semantic matching.
+Supports multiple resume formats:
 
-- `utils`: The utils.py script serves as a central toolkit for the project, containing reusable helper functions that standardize and preprocess text and skills. It sets up `Natural Language Processing (NLP)` components from nltk and spacy for tasks like lemmatization and stop word removal. The script's core functionality revolves around a large `SKILL_NORMALIZATION_MAP` that maps common skill variations to a single, canonical form, ensuring consistency across all job and course data. This script is used by both data_processing.py and testing.py to clean and normalize text, extract skills, and perform semantic comparisons, ensuring that data is consistently formatted before it's used for model training or user interaction. 
+- PDF
+- DOCX
+- Images
 
-### Architecture Diagram
-![WhatsApp Image 2025-08-25 at 17 08 29_c9deb4c6](https://github.com/user-attachments/assets/17cf07cb-a8ee-498a-a080-66e6e984af04)
+Text is extracted using **Tesseract OCR** before NLP preprocessing.
 
- ### Model Training Results 
+---
 
-<img width="1000" height="600" alt="Figure_2" src="https://github.com/user-attachments/assets/66b9e7ca-1061-4538-a946-2f74e3366e01" />
+## 📝 Skill Extraction
 
-<img width="1869" height="531" alt="image" src="https://github.com/user-attachments/assets/0c66d0af-7d88-4256-b7d0-fdb47fe0691a" />
+Natural Language Processing techniques are used to:
 
-<img width="751" height="249" alt="image" src="https://github.com/user-attachments/assets/25ef7862-cebd-44f3-8821-925d897031a6" />
+- Tokenize text
+- Remove stop words
+- Lemmatize skills
+- Normalize skill variations
 
+A custom **Skill Normalization Map** ensures consistent representation across resumes, jobs, and courses.
 
-### Dataset Info
-<img width="867" height="290" alt="image" src="https://github.com/user-attachments/assets/36217c5e-c20a-4422-b30e-78a515bf21f0" />
+---
 
+## 🔍 Semantic Embedding Generation
 
+The project uses
 
-### Streamlit Interface
-<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/3ba1dae3-8721-4084-8633-887f686c6757" />
+**all-MiniLM-L6-v2**
 
-### Skill Extraction From Resume Using Tesseract OCR
-<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/07bce9d4-d0ae-43aa-be34-c0d21163901c" />
+to generate dense embeddings for
 
-### Course Recommendation in case of Skill Gap
-<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/57a7561e-f621-4240-9c66-c5ad77593b5e" />
+- Job descriptions
+- Courses
+- Skills
 
-### Invalid Document Upload
-<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/e1615a82-22af-4af1-9704-f509d6cbea99" />
+These embeddings are stored inside **ChromaDB** for efficient semantic retrieval.
 
-### Irrelevant Job Post
-<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/0936bb4d-1d9b-4ebe-9838-29eca46d1c86" />
+---
 
-### RoadMap of Course
-<img width="1557" height="680" alt="image" src="https://github.com/user-attachments/assets/28645af4-cf32-4716-af86-ef3313e99b7d" />
+## 🤖 Deep Structured Semantic Model (DSSM)
 
+A Dual-Tower DSSM is trained to learn semantic relationships between
 
+- Jobs
+- Required skills
+- Courses
 
+Training includes
 
+- Positive & negative pair generation
+- Early stopping
+- Exponential Moving Average (EMA)
 
+allowing the model to outperform traditional cosine similarity.
 
+---
 
+## 📚 Intelligent Recommendation Engine
 
+Once a target job is selected, the system
 
+- Extracts missing skills
+- Performs semantic retrieval
+- Ranks courses using DSSM
+- Generates personalized learning recommendations
 
+---
 
+# 🛠️ Tech Stack
 
+| Category | Technologies |
+|----------|--------------|
+| **Programming Language** | Python |
+| **Frontend** | Streamlit |
+| **Deep Learning** | DSSM (Dual Tower Network) |
+| **Embeddings** | all-MiniLM-L6-v2 |
+| **Vector Database** | ChromaDB |
+| **NLP** | SpaCy, NLTK |
+| **OCR** | Tesseract OCR |
+| **Machine Learning** | PyTorch |
+| **Data Processing** | Pandas, NumPy |
+
+---
+
+# 📂 Project Modules
+
+## 📊 Exploratory Data Analysis
+
+- Dataset exploration
+- Missing value analysis
+- Skill distribution
+- Cross-dataset comparison
+
+---
+
+## ⚙️ Data Processing
+
+- Cleaning
+- Skill normalization
+- Canonical mapping
+- Text preprocessing
+
+---
+
+## 🗄️ ChromaDB Population
+
+- Generate embeddings
+- Store vectors
+- Initial job-course mapping
+
+---
+
+## 🏋️ Model Training
+
+- DSSM Training
+- Positive/Negative Sampling
+- EMA
+- Early Stopping
+
+---
+
+## 🧪 Model Testing
+
+Interactive Streamlit application that
+
+- Parses resumes
+- Detects skill gaps
+- Recommends courses
+- Generates learning roadmap
+
+---
+
+## 🔧 Utility Module
+
+Contains reusable NLP utilities including
+
+- Text preprocessing
+- Skill extraction
+- Lemmatization
+- Skill normalization
+- Semantic comparison
+
+---
+
+# 📊 Architecture Diagram
+
+<p align="center">
+<img src="https://github.com/user-attachments/assets/17cf07cb-a8ee-498a-a080-66e6e984af04"/>
+</p>
+
+---
+
+# 📈 Model Performance
+
+The DSSM training demonstrated effective convergence while learning meaningful semantic representations between job descriptions and educational resources.
+
+### Training Curve
+
+<p align="center">
+<img src="https://github.com/user-attachments/assets/66b9e7ca-1061-4538-a946-2f74e3366e01"/>
+</p>
+
+### Evaluation Results
+
+<p align="center">
+<img src="https://github.com/user-attachments/assets/0c66d0af-7d88-4256-b7d0-fdb47fe0691a"/>
+</p>
+
+<p align="center">
+<img src="https://github.com/user-attachments/assets/25ef7862-cebd-44f3-8821-925d897031a6"/>
+</p>
+
+---
+
+# 📊 Dataset
+
+The project utilizes datasets containing
+
+- Job descriptions
+- Required skills
+- Online courses
+- Skill mappings
+
+<p align="center">
+<img src="https://github.com/user-attachments/assets/36217c5e-c20a-4422-b30e-78a515bf21f0"/>
+</p>
+
+---
+
+# 🖥️ Application Demo
+
+## Streamlit Interface
+
+<img src="https://github.com/user-attachments/assets/3ba1dae3-8721-4084-8633-887f686c6757"/>
+
+---
+
+## Resume Skill Extraction
+
+<img src="https://github.com/user-attachments/assets/07bce9d4-d0ae-43aa-be34-c0d21163901c"/>
+
+---
+
+## Skill Gap Recommendation
+
+<img src="https://github.com/user-attachments/assets/57a7561e-f621-4240-9c66-c5ad77593b5e"/>
+
+---
+
+## Invalid Resume Detection
+
+<img src="https://github.com/user-attachments/assets/e1615a82-22af-4af1-9704-f509d6cbea99"/>
+
+---
+
+## Invalid Job Detection
+
+<img src="https://github.com/user-attachments/assets/0936bb4d-1d9b-4ebe-9838-29eca46d1c86"/>
+
+---
+
+## Personalized Learning Roadmap
+
+<img src="https://github.com/user-attachments/assets/28645af4-cf32-4716-af86-ef3313e99b7d"/>
+
+---
+
+# 🚀 Future Enhancements
+
+- Retrieval-Augmented Generation (RAG)
+- Multi-language resume support
+- LinkedIn profile analysis
+- Live job portal integration
+- LLM-powered career coaching
+- Salary prediction
+- Personalized interview preparation
+- Recruiter dashboard
+
+---
+
+# 👨‍💻 Internship Project
+
+This project was developed during my **Summer 2025 Internship** at the **Centre of Cognitive Computing and Computational Intelligence (C3I)**, where I explored semantic AI techniques for intelligent career recommendation systems.
+
+---
+
+# ⭐ Acknowledgements
+
+I would like to thank the **Centre of Cognitive Computing and Computational Intelligence (C3I)** for providing the opportunity, mentorship, and resources to carry out this research and development project.
+
+If you found this project interesting, consider giving the repository a ⭐ on GitHub!
