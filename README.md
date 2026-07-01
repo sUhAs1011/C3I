@@ -325,11 +325,3 @@ The project utilizes datasets containing
 # 👨‍💻 Internship Project
 
 This project was developed during my **Summer 2025 Internship** at the **Centre of Cognitive Computing and Computational Intelligence (C3I)**, where I explored semantic AI techniques for intelligent career recommendation systems.
-
----
-
-# ⭐ Acknowledgements
-
-I would like to thank the **Centre of Cognitive Computing and Computational Intelligence (C3I)** for providing the opportunity, mentorship, and resources to carry out this research and development project.
-
-If you found this project interesting, consider giving the repository a ⭐ on GitHub!
