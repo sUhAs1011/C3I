@@ -322,10 +322,6 @@ The project utilizes datasets containing
 
 ---
 
-# 👨‍💻 Internship Project
-
-This project was developed during my **Summer 2025 Internship** at the **Centre of Cognitive Computing and Computational Intelligence (C3I)**, where I explored semantic AI techniques for intelligent career recommendation systems.
-
 # Certificate
 <img width="1448" height="1086" alt="ChatGPT Image Jul 16, 2026, 06_56_40 PM" src="https://github.com/user-attachments/assets/40543f3b-fb9d-4729-aab6-45743d2452eb" />
 
